@@ -6,12 +6,16 @@ import numpy as np
 import tensorflow as tf
 import tensornets as nets
 
-from tensornets.datasets import voc
+from tensornets.datasets import tcp
+
 #TODO: Change the data_dir
-data_dir = "/home/taehoonlee/Data/VOCdevkit/VOC%d"
+#data_dir = "/home/taehoonlee/Data/VOCdevkit/VOC%d"
+data_dir = '/media/efe/DATA/Data/TownCentre_images'
+
 #TODO: Write a load_train function for TcP dataset
-trains = voc.load_train([data_dir % 2007, data_dir % 2012],
-                        'trainval', batch_size=48)
+#trains = voc.load_train([data_dir % 2007, data_dir % 2012],
+#                        'trainval', batch_size=48)
+trains = tcp.load_train(data_dir,  batch_size=48) 
 
 # Define a model
 inputs = tf.placeholder(tf.float32, [None, 224, 224, 3])
@@ -33,18 +37,18 @@ train = tf.train.MomentumOptimizer(lr, 0.9).minimize(model.loss,
 '''
 
 new_learning_rate = 0.001
-loss = tf.losses.sparse_softmax_cross_entropy(labels=next_output, logits=logits)   
+#loss = tf.losses.sparse_softmax_cross_entropy(labels=next_output, logits=logits)   
 optimizer = tf.train.GradientDescentOptimizer(new_learning_rate)
-train = optimizer.minimize(model.loss)
+#train = optimizer.minimize(model.loss)
 
 with tf.Session() as sess:
 
     # Load Darknet19
-    sess.run(tf.global_variables_initializer())
-    sess.run(model.stem.pretrained())
+    #sess.run(tf.global_variables_initializer())
+    #sess.run(model.stem.pretrained())
 
     # We run "sess.run(model.pretrained())" before the testing VGG16
-    # sess.run(model.pretrained())
+    sess.run(model.pretrained())
 
     losses = []
     for i in range(233):
